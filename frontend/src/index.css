@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-purple-900 via-purple-700 to-pink-600 min-h-screen;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply px-8 py-4 bg-white text-purple-900 font-bold rounded-xl 
+           hover:scale-105 hover:shadow-2xl transition-all duration-300 
+           focus:outline-none focus:ring-4 focus:ring-purple-300;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg 
+           hover:bg-purple-700 transition-colors duration-200;
+  }
+  
+  .card {
+    @apply bg-white/10 backdrop-blur-lg rounded-2xl p-6 
+           border border-white/20 shadow-xl;
+  }
+}
+
