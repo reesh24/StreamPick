@@ -21,3 +21,6 @@ backend/target/
 frontend/node_modules/
 frontend/dist/
 
+GITHUB_SETUP.md
+QUICKSTART.md
+PROJECT_STRUCTURE.md
