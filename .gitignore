@@ -10,17 +10,42 @@ Thumbs.db
 
 # Logs
 *.log
+logs/
 
 # Environment
 .env
 .env.local
 .env.*.local
 
-# Project-specific
+# Java/Maven
 backend/target/
+backend/*.log
+backend/*.txt
+
+# Frontend
 frontend/node_modules/
 frontend/dist/
 
+# Python
+recommendation-service/venv/
+recommendation-service/__pycache__/
+recommendation-service/**/__pycache__/
+recommendation-service/**/*.pyc
+recommendation-service/data/
+
+# CSV files (using Contentstack as source)
+*.csv
+
+# Documentation (keep only README.md)
+BUILD_COMPLETE.md
+LEARNING_RESOURCES.md
+PERSONALIZE_STRATEGY.md
+PROJECT_STRUCTURE.md
+RECOMMENDATION_*.md
+START_HERE.md
+TESTING_GUIDE.md
 GITHUB_SETUP.md
 QUICKSTART.md
-PROJECT_STRUCTURE.md
+
+# Import files (already in Contentstack)
+movies-import/

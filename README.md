@@ -1,56 +1,57 @@
 # 🎬 StreamPick
 
-**End the scroll. Start watching.**
+**AI-Powered Movie Recommendations in 3 Clicks**
 
-StreamPick is an AI-powered movie recommendation system that helps users find the perfect movie in just 3 clicks based on their mood, available time, and contextual intelligence.
-
-## 📋 Overview
-
-StreamPick solves decision fatigue for streaming service users by combining:
-- **Contentstack Headless CMS** for content management
-- **Custom recommendation algorithm** with contextual awareness (time of day, day of week)
-- **Modern full-stack architecture** with React and Spring Boot
-- **Beautiful, intuitive UI** for seamless user experience
+StreamPick is an intelligent movie recommendation system that uses machine learning to find your perfect movie based on your mood and available time.
 
 ## ✨ Features
 
-- **3-Click Experience:** Mood → Time → Perfect Recommendation
-- **Smart Algorithm:** Context-aware scoring based on mood, runtime, quality, time of day, and day of week
-- **AI-Powered Descriptions:** Brandkit AI generates compelling movie descriptions
-- **Personalization Ready:** Contentstack Personalize integration for audience targeting
-- **Mobile Responsive:** Beautiful UI that works on all devices
+- 🤖 **ML-Powered Recommendations** - Content-based filtering using TF-IDF and cosine similarity
+- 🎭 **Mood-Based Selection** - Six curated moods (cozy, thrilling, laugh, deep, escape, chill)
+- ⏱️ **Time-Aware** - Smart filtering based on your available time
+- 🎬 **Interactive UI** - Click alternative recommendations to explore all options
+- 📊 **Match Scores** - See how well each movie fits your preferences
+- 🎨 **Beautiful Design** - Modern, responsive interface with smooth animations
+- 📱 **Mobile Friendly** - Works seamlessly on all devices
 
 ## 🏗️ Architecture
 
 ```
-StreamPick/
-├── backend/          # Spring Boot REST API
-│   └── src/main/java/com/streampick/
-│       ├── config/       # Contentstack & CORS configuration
-│       ├── controller/   # REST endpoints
-│       ├── service/      # Business logic & recommendation algorithm
-│       ├── model/        # Domain models
-│       ├── dto/          # Data Transfer Objects
-│       └── exception/    # Error handling
-│
-├── frontend/         # React + Vite UI
-│   └── src/
-│       ├── components/   # React components
-│       ├── services/     # API integration
-│       ├── hooks/        # Custom hooks
-│       └── utils/        # Helper functions
-│
-└── README.md
+┌─────────────┐
+│ Contentstack│ (Movie data + images)
+└──────┬──────┘
+       │
+       ↓
+┌──────────────┐
+│ Java Backend │ (Spring Boot + Contentstack SDK)
+└──────┬───────┘
+       │
+       ↓
+┌──────────────┐
+│ Python ML    │ (FastAPI + scikit-learn)
+│  Service     │ (TF-IDF + Cosine Similarity)
+└──────┬───────┘
+       │
+       ↓
+┌──────────────┐
+│ React        │ (Vite + Tailwind CSS)
+│  Frontend    │
+└──────────────┘
 ```
 
 ## 🛠️ Tech Stack
 
-### Backend
+### Backend (Java)
 - **Framework:** Spring Boot 3.2
 - **Language:** Java 17
-- **Build Tool:** Maven
-- **CMS SDK:** Contentstack Java SDK 1.6.4
-- **Architecture:** Service Layer Pattern with RESTful APIs
+- **CMS SDK:** Contentstack Java SDK
+- **HTTP Client:** RestTemplate
+
+### ML Service (Python)
+- **Framework:** FastAPI
+- **ML Library:** scikit-learn
+- **Data Processing:** pandas, numpy
+- **Algorithms:** TF-IDF Vectorization, Cosine Similarity
 
 ### Frontend
 - **Framework:** React 18
@@ -59,191 +60,216 @@ StreamPick/
 - **HTTP Client:** Axios
 - **Icons:** Lucide React
 
-### CMS & Content
-- **Headless CMS:** Contentstack
+### Content Management
+- **CMS:** Contentstack
 - **Content Delivery:** Contentstack Delivery API
-- **AI Content:** Brandkit AI (for movie descriptions)
-- **Personalization:** Contentstack Personalize (optional)
+
+## 📁 Project Structure
+
+```
+personalize-project/
+├── backend/                 # Java Spring Boot API
+│   ├── src/main/java/com/streampick/
+│   │   ├── config/         # Configuration
+│   │   ├── controller/     # REST endpoints
+│   │   ├── service/        # Business logic
+│   │   ├── model/          # Domain models
+│   │   └── dto/            # Data transfer objects
+│   └── pom.xml
+│
+├── recommendation-service/  # Python ML service
+│   ├── app/
+│   │   ├── main.py         # FastAPI app
+│   │   ├── models/         # ML models
+│   │   ├── schemas/        # Pydantic schemas
+│   │   └── services/       # ML engine
+│   └── requirements.txt
+│
+├── frontend/               # React UI
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── services/      # API integration
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── package.json
+│
+├── start-all.sh           # Start all services
+├── stop-all.sh            # Stop all services
+└── README.md
+```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Java 17+** and Maven
-- **Node.js 18+** and npm
-- **Contentstack account** with API credentials
+- Java 17+
+- Maven 3.6+
+- Python 3.13+
+- Node.js 18+
+- Contentstack account
 
-### 1. Contentstack Setup
-
-1. Create a free account at [Contentstack](https://www.contentstack.com)
-2. Create a new Stack called "StreamPick"
-3. Get your API credentials from Settings → Tokens:
-   - API Key
-   - Delivery Token
-   - Environment name
-
-4. Create "Movie" content type with these fields:
-   - `title` (Single Line Text, required)
-   - `year` (Number)
-   - `runtime` (Number, required) - in minutes
-   - `rating` (Number) - 0-10 scale
-   - `genre` (Select Multiple)
-   - `mood_tags` (Select Multiple: cozy, thrilling, laugh, deep, escape, chill)
-   - `platforms` (Select Multiple: Netflix, Prime Video, HBO Max, Disney+, Hulu)
-   - `description` (Multi Line Text)
-   - `ai_description` (Multi Line Text)
-   - `poster` (File)
-
-5. Add 3-5 test movies and publish them
-
-### 2. Backend Setup
+### 1. Clone & Setup
 
 ```bash
-cd backend
+# Clone the repository
+cd personalize-project
 
-# Copy environment template
-cp .env.example .env
-
-# Add your Contentstack credentials to .env
-# CONTENTSTACK_API_KEY=your_key
-# CONTENTSTACK_DELIVERY_TOKEN=your_token
-# CONTENTSTACK_ENVIRONMENT=production
-
-# Run the application
-./mvnw spring-boot:run
+# Configure Contentstack credentials
+# Edit backend/src/main/resources/application.properties
+# Add your API key, delivery token, and environment
 ```
 
-Backend will start on `http://localhost:8080`
-
-See [backend/README.md](backend/README.md) for detailed instructions.
-
-### 3. Frontend Setup
+### 2. Start All Services
 
 ```bash
-cd frontend
+# Make script executable
+chmod +x start-all.sh
 
-# Install dependencies
-npm install
-
-# Copy environment template
-cp .env.example .env
-
-# Configure backend URL in .env
-# VITE_API_URL=http://localhost:8080
-
-# Run development server
-npm run dev
+# Start everything (Python ML + Java backend + React frontend)
+./start-all.sh
 ```
 
-Frontend will open at `http://localhost:5173`
+This will:
+- Start Python ML service on `http://localhost:8001`
+- Start Java backend on `http://localhost:8080`
+- Start React frontend on `http://localhost:5173`
 
-See [frontend/README.md](frontend/README.md) for detailed instructions.
+### 3. Access the App
 
-## 📊 How It Works
+Open your browser to **http://localhost:5173** and:
+1. Select your mood
+2. Choose available time
+3. Get your perfect movie recommendation!
 
-### The Recommendation Algorithm
+### Stop All Services
 
-StreamPick's core intelligence is a custom scoring algorithm that evaluates movies based on:
+```bash
+./stop-all.sh
+```
 
-1. **Mood Match (40%)** - Does the movie match the user's selected mood?
-2. **Runtime Fit (20%)** - How well does the movie length fit available time?
-3. **Quality Rating (15%)** - Movie's IMDb rating score
-4. **Time of Day Context (15%)** - Late night? Prefer chill content. Evening? Suggest thrillers.
-5. **Day of Week Context (10%)** - Weekend? Show longer movies. Weekday? Quick watches.
+## 🧠 How It Works
 
-The highest-scoring movie is recommended with an AI-generated description explaining why it's perfect for the user.
+### Content-Based Filtering
 
-## 🎯 Project Status
+The recommendation engine uses **TF-IDF (Term Frequency-Inverse Document Frequency)** to convert movie features into numerical vectors, then calculates **Cosine Similarity** to find movies similar to user preferences.
 
-### ✅ Completed
-- [x] Project structure created
-- [x] Backend Spring Boot setup with Contentstack integration
-- [x] Frontend React + Vite setup with Tailwind CSS
-- [x] Configuration files and environment templates
-- [x] API service layer structure
+**Scoring Algorithm:**
+1. **Mood Match (40 points)** - Perfect mood tag match
+2. **Quality Rating (20 points)** - Higher rated movies get bonus
+3. **Content Similarity (30 points)** - TF-IDF + cosine similarity
+4. **Runtime Fit (10 points)** - How well it fits your time
 
-### 🚧 In Progress / Next Steps
-- [ ] Implement ContentstackService (fetch movies from CMS)
-- [ ] Implement RecommendationService (scoring algorithm)
-- [ ] Create REST API controllers
-- [ ] Build UI components (Home, MoodSelector, TimeSelector, RecommendationCard)
-- [ ] Connect frontend to backend API
-- [ ] Add Brandkit AI for descriptions
-- [ ] Integrate Contentstack Personalize
-- [ ] Deploy to production
+### Data Flow
 
-## 📁 API Endpoints (To Be Implemented)
+```
+1. User selects mood & time
+2. Frontend sends request to Java backend
+3. Java fetches ALL movies from Contentstack (with images)
+4. Java sends movies to Python ML service
+5. Python trains TF-IDF model on the fly
+6. Python scores and ranks all movies
+7. Python returns top 5 recommendations
+8. Java enriches with full movie data
+9. Frontend displays featured + 4 alternatives
+10. User can click any alternative to explore
+```
 
-### Movies
+## 📊 API Endpoints
+
+### Java Backend (Port 8080)
+
 - `GET /api/movies` - Get all movies
 - `GET /api/movies/mood/{mood}` - Get movies by mood
-
-### Recommendations
-- `POST /api/recommendations` - Get movie recommendation
+- `POST /api/recommendations` - Get recommendations
   ```json
-  Request:
   {
-    "mood": "cozy",
-    "timeAvailable": 90
-  }
-  
-  Response:
-  {
-    "movie": { ... },
-    "aiReason": "Perfect for your cozy mood...",
-    "matchScore": 87.5
+    "mood": "laugh",
+    "timeAvailable": 90,
+    "userId": "optional"
   }
   ```
 
-## 🔧 Development Workflow
+### Python ML Service (Port 8001)
 
-1. **Start Backend:** `cd backend && ./mvnw spring-boot:run`
-2. **Start Frontend:** `cd frontend && npm run dev`
-3. **Make Changes:** Edit code, auto-reloads on save
-4. **Test:** Use browser + Postman for API testing
+- `GET /health` - Health check
+- `GET /moods` - Get available moods
+- `POST /recommend` - ML recommendation engine
 
-## 📝 Environment Variables
+## 🎯 Features in Detail
 
-### Backend (.env)
+### Interactive Recommendations
+- **Featured Movie**: Large display with full details, poster, platforms, description
+- **Alternative Movies**: 4 additional recommendations in card format
+- **Click to Explore**: Click any alternative to make it the featured movie
+- **Smooth Animations**: Hover effects, image zoom, smooth transitions
+
+### Smart Filtering
+- **Mood-based**: Filters movies matching selected mood
+- **Time-aware**: Prioritizes movies that fit available time
+- **Quality-weighted**: Higher rated movies get preference
+- **Fallback Logic**: Java fallback if Python service is unavailable
+
+### Beautiful UI
+- **Gradient backgrounds**: Purple/pink themed
+- **Glass morphism**: Backdrop blur effects
+- **Smooth scrolling**: Auto-scroll to top on card swap
+- **Responsive design**: Works on mobile, tablet, desktop
+- **Loading states**: Elegant loading animations
+
+## 🔧 Development
+
+### Run Individual Services
+
+**Python ML Service:**
 ```bash
-CONTENTSTACK_API_KEY=your_api_key
-CONTENTSTACK_DELIVERY_TOKEN=your_delivery_token
-CONTENTSTACK_ENVIRONMENT=production
-CORS_ALLOWED_ORIGINS=http://localhost:5173
+cd recommendation-service
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-### Frontend (.env)
+**Java Backend:**
 ```bash
-VITE_API_URL=http://localhost:8080
-VITE_PERSONALIZE_PROJECT_UID=your_project_uid  # Optional
+cd backend
+./mvnw spring-boot:run
 ```
 
-## 🚀 Deployment (Future)
+**React Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-- **Backend:** Railway (Spring Boot optimized)
-- **Frontend:** Contentstack Launch or Vercel
-- **CI/CD:** Auto-deploy from GitHub
+## 📝 Configuration
 
-## 🤝 Contributing
+### Backend (`application.properties`)
+```properties
+contentstack.api.key=your_api_key
+contentstack.delivery.token=your_delivery_token
+contentstack.environment=production
+python.recommendation.service.url=http://localhost:8001
+cors.allowed.origins=http://localhost:5173
+```
 
-This is a learning project demonstrating full-stack development with headless CMS integration.
+## 🎓 Learning Highlights
+
+This project demonstrates:
+- ✅ Full-stack ML application architecture
+- ✅ Content-based recommendation systems
+- ✅ TF-IDF and cosine similarity
+- ✅ Microservices architecture (Java + Python)
+- ✅ Headless CMS integration
+- ✅ RESTful API design
+- ✅ Modern React with hooks
+- ✅ Responsive UI design
+- ✅ Error handling and fallbacks
 
 ## 📄 License
 
-MIT License - See LICENSE file for details
-
-## 🎓 Learning Objectives
-
-This project demonstrates:
-- Full-stack application architecture
-- RESTful API design
-- Headless CMS integration
-- Custom algorithm development
-- Modern frontend development with React
-- Spring Boot best practices
-- Tailwind CSS utility-first styling
+MIT License
 
 ---
 
-**Built with ❤️ using Contentstack, Spring Boot, and React**
-
+**Made with ❤️ using Contentstack + Spring Boot + Python ML + React**
