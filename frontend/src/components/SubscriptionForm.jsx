@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import api from '../services/api';
 
 const SubscriptionForm = ({ onBack }) => {
   const [formData, setFormData] = useState({
@@ -44,21 +45,15 @@ const SubscriptionForm = ({ onBack }) => {
 
     try {
       // Call your Java backend
-      const response = await fetch('http://localhost:8080/api/subscribers/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          preferredMoods: formData.preferredMoods
-        })
+      const response = await api.post('/api/subscribers/add', {
+        name: formData.name,
+        email: formData.email,
+        preferredMoods: formData.preferredMoods
       });
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (response.ok && data.success) {
+      if (response.status === 200 && data.success) {
         setMessage({ 
           text: data.message || '🎉 Yay! You\'re now subscribed to movie magic!', 
           type: 'success' 

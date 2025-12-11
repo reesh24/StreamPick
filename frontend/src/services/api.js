@@ -3,11 +3,15 @@ import axios from 'axios';
 /**
  * Axios instance configured for StreamPick backend API
  */
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+console.log('🚀 API Base URL:', baseURL);
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
+  baseURL: baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 180000, // 3 minutes timeout for cold starts
 });
 
 // Request interceptor for logging (development only)
