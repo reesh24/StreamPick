@@ -1,5 +1,6 @@
 package com.streampick;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,6 +16,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class StreamPickApplication {
 
     public static void main(String[] args) {
+        // Load .env file before Spring Boot starts
+        Dotenv dotenv = Dotenv.configure()
+                .directory(".")
+                .ignoreIfMissing()
+                .load();
+        
+        // Set environment variables from .env file
+        dotenv.entries().forEach(entry -> 
+            System.setProperty(entry.getKey(), entry.getValue())
+        );
+        
         SpringApplication.run(StreamPickApplication.class, args);
     }
 }

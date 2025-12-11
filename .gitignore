@@ -1,23 +1,42 @@
-# OS Files
-.DS_Store
-Thumbs.db
+# Environment variables
+.env
+*.env
+
+# Backend
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Python
+recommendation-service/venv/
+recommendation-service/__pycache__/
+recommendation-service/**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Logs
 *.log
+logs/
 
-# Environment
-.env
-.env.local
-.env.*.local
-
-# Project-specific
-backend/target/
-frontend/node_modules/
-frontend/dist/
-
+# Temporary files
+*.tmp
+*.temp
+/tmp/
