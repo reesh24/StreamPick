@@ -31,27 +31,35 @@ export default function TimeSelector({ onTimeSelect, onBack }) {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in relative">
+      {/* Decorative time/movie elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+        <div className="absolute top-10 right-16 text-6xl animate-float">⏰</div>
+        <div className="absolute bottom-16 left-12 text-5xl animate-float-delayed">⌛</div>
+        <div className="absolute top-32 left-24 text-4xl animate-float-slow">🕐</div>
+        <div className="absolute bottom-32 right-20 text-5xl animate-float">📺</div>
+      </div>
+
       {/* Back button */}
       {onBack && (
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-purple-200 hover:text-white transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 hover:scale-105 transition-all border border-white/20"
         >
           <ArrowLeft className="w-5 h-5" />
-          Back
+          <span className="font-semibold">Back</span>
         </button>
       )}
 
       {/* Header */}
       <div className="text-center space-y-4">
         <div className="flex justify-center">
-          <Clock className="w-16 h-16 text-purple-300" />
+          <Clock className="w-16 h-16 text-rose-300" />
         </div>
         <h2 className="text-5xl font-bold text-white">
           How much time do you have?
         </h2>
-        <p className="text-xl text-purple-200">
+        <p className="text-xl text-slate-300">
           We'll find something that fits perfectly
         </p>
       </div>
@@ -76,23 +84,23 @@ export default function TimeSelector({ onTimeSelect, onBack }) {
               <h3 className="text-3xl font-bold text-white">
                 {option.label}
               </h3>
-              <p className="text-2xl text-purple-200 font-semibold">
+              <p className="text-2xl text-slate-200 font-semibold">
                 {option.description}
               </p>
-              <p className="text-sm text-purple-300">
+              <p className="text-sm text-slate-300">
                 {option.subtitle}
               </p>
             </div>
 
             {/* Hover indicator */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/0 to-pink-500/0 
-                          group-hover:from-purple-500/10 group-hover:to-pink-500/10 transition-all duration-300" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-rose-500/0 to-orange-500/0 
+                          group-hover:from-rose-500/10 group-hover:to-orange-500/10 transition-all duration-300" />
           </button>
         ))}
       </div>
 
       {/* Helper text */}
-      <p className="text-center text-purple-300 text-sm">
+      <p className="text-center text-slate-400 text-sm">
         💡 Don't worry, we'll consider your actual available time in the recommendation
       </p>
     </div>

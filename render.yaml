@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: streampick-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: oregon
+    env: docker
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: CONTENTSTACK_API_KEY
+        sync: false
+      - key: CONTENTSTACK_DELIVERY_TOKEN
+        sync: false
+      - key: CONTENTSTACK_AUTHTOKEN
+        sync: false
+      - key: CONTENTSTACK_ENVIRONMENT
+        value: production
+      - key: CONTENTSTACK_SUBSCRIBERS_ENTRY_UID
+        sync: false
+      - key: PORT
+        value: 8080
+

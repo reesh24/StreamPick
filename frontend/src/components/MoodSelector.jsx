@@ -46,15 +46,22 @@ export default function MoodSelector({ onMoodSelect, onBack }) {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in relative">
+      {/* Decorative movie emojis */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+        <div className="absolute top-20 right-10 text-5xl animate-float">🎭</div>
+        <div className="absolute bottom-20 left-10 text-5xl animate-float-delayed">🎪</div>
+        <div className="absolute top-40 left-20 text-4xl animate-float-slow">🎨</div>
+      </div>
+
       {/* Back button */}
       {onBack && (
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-purple-200 hover:text-white transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 hover:scale-105 transition-all border border-white/20"
         >
           <ArrowLeft className="w-5 h-5" />
-          Back
+          <span className="font-semibold">Back</span>
         </button>
       )}
 
@@ -63,7 +70,7 @@ export default function MoodSelector({ onMoodSelect, onBack }) {
         <h2 className="text-5xl font-bold text-white">
           What's your vibe?
         </h2>
-        <p className="text-xl text-purple-200">
+        <p className="text-xl text-slate-300">
           Pick the mood that matches how you're feeling
         </p>
       </div>
@@ -89,13 +96,13 @@ export default function MoodSelector({ onMoodSelect, onBack }) {
             </h3>
 
             {/* Description */}
-            <p className="text-purple-200 text-sm">
+            <p className="text-slate-300 text-sm">
               {mood.description}
             </p>
 
             {/* Hover indicator */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/0 to-pink-500/0 
-                          group-hover:from-purple-500/10 group-hover:to-pink-500/10 transition-all duration-300" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-rose-500/0 to-orange-500/0 
+                          group-hover:from-rose-500/10 group-hover:to-orange-500/10 transition-all duration-300" />
           </button>
         ))}
       </div>

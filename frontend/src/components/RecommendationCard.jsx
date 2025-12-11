@@ -20,11 +20,11 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
     return (
       <div className="text-center space-y-6 animate-fade-in">
         <div className="flex justify-center">
-          <div className="w-20 h-20 border-4 border-purple-300 border-t-white rounded-full animate-spin" />
+          <div className="w-20 h-20 border-4 border-teal-300 border-t-white rounded-full animate-spin" />
         </div>
         <div className="space-y-2">
           <h3 className="text-2xl font-bold text-white">Finding your perfect match...</h3>
-          <p className="text-purple-200">Analyzing your preferences with AI ✨</p>
+          <p className="text-teal-200">Analyzing your preferences with AI ✨</p>
         </div>
       </div>
     );
@@ -41,8 +41,8 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
         <div className="flex gap-4 justify-center">
           <button
             onClick={onTryAnother}
-            className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg 
-                     hover:bg-purple-700 transition-colors"
+            className="px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg 
+                     hover:bg-teal-700 transition-colors"
           >
             Try Again
           </button>
@@ -109,7 +109,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
           {/* Left side - Movie poster/info */}
           <div className="space-y-6">
             {/* Poster */}
-            <div className="relative aspect-[2/3] bg-gradient-to-br from-purple-900/50 to-pink-900/50 rounded-2xl 
+            <div className="relative aspect-[2/3] bg-gradient-to-br from-teal-900/50 to-cyan-900/50 rounded-2xl 
                           border-2 border-white/10 overflow-hidden shadow-2xl">
               {movie.imageUrl || movie.image?.url ? (
                 <>
@@ -137,12 +137,12 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
             {/* Platforms */}
             {movie.platforms && movie.platforms.length > 0 && (
               <div>
-                <p className="text-purple-300 text-sm mb-2">Available on:</p>
+                <p className="text-teal-300 text-sm mb-2">Available on:</p>
                 <div className="flex flex-wrap gap-2">
                   {movie.platforms.map((platform, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-purple-600/30 text-purple-100 rounded-full text-sm border border-purple-400/30"
+                      className="px-3 py-1 bg-teal-600/30 text-teal-100 rounded-full text-sm border border-teal-400/30"
                     >
                       {platform}
                     </span>
@@ -161,7 +161,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
               </h1>
               
               {/* Meta info */}
-              <div className="flex flex-wrap gap-4 text-purple-200">
+              <div className="flex flex-wrap gap-4 text-teal-200">
                 {movie.year && <span>{movie.year}</span>}
                 {movie.runtime && (
                   <span className="flex items-center gap-1">
@@ -179,14 +179,14 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
             </div>
 
             {/* Match score */}
-            <div className="p-4 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-xl border border-purple-400/30">
+            <div className="p-4 bg-gradient-to-r from-teal-600/30 to-cyan-600/30 rounded-xl border border-teal-400/30">
               <div className="flex items-center justify-between">
-                <span className="text-purple-200 font-semibold">Match Score</span>
+                <span className="text-teal-200 font-semibold">Match Score</span>
                 <span className="text-3xl font-bold text-white">{matchScore}%</span>
               </div>
               <div className="mt-2 h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000"
+                  className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all duration-1000"
                   style={{ width: `${matchScore}%` }}
                 />
               </div>
@@ -195,7 +195,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
             {/* Genres */}
             {movie.genre && movie.genre.length > 0 && (
               <div>
-                <p className="text-purple-300 text-sm mb-2">Genres:</p>
+                <p className="text-teal-300 text-sm mb-2">Genres:</p>
                 <div className="flex flex-wrap gap-2">
                   {movie.genre.map((g, index) => (
                     <span
@@ -212,7 +212,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
             {/* Description */}
             {movie.description && (
               <div>
-                <p className="text-purple-100 leading-relaxed">
+                <p className="text-teal-100 leading-relaxed">
                   {movie.description}
                 </p>
               </div>
@@ -241,7 +241,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
         <div className="space-y-4">
           <div className="text-center space-y-1">
             <h3 className="text-2xl font-bold text-white">You might also like</h3>
-            <p className="text-purple-300 text-sm">👆 Click any movie to view details</p>
+            <p className="text-teal-300 text-sm">👆 Click any movie to view details</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -254,7 +254,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
                           transition-all duration-300 cursor-pointer group"
               >
                 {/* Poster */}
-                <div className="relative aspect-[2/3] bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-lg mb-3
+                <div className="relative aspect-[2/3] bg-gradient-to-br from-teal-900/30 to-cyan-900/30 rounded-lg mb-3
                               overflow-hidden shadow-lg border border-white/5">
                   {alt.movie.imageUrl || alt.movie.image?.url ? (
                     <>
@@ -287,7 +287,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
                 </h4>
 
                 {/* Info */}
-                <div className="space-y-1 text-sm text-purple-200 mb-3">
+                <div className="space-y-1 text-sm text-teal-200 mb-3">
                   <div className="flex items-center justify-between">
                     <span>{alt.movie.year}</span>
                     <span className="flex items-center gap-1">
@@ -302,8 +302,8 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
                 </div>
 
                 {/* Match score badge */}
-                <div className="px-3 py-1 bg-purple-600/30 rounded-full text-center border border-purple-400/30">
-                  <span className="text-sm font-semibold text-purple-100">
+                <div className="px-3 py-1 bg-teal-600/30 rounded-full text-center border border-teal-400/30">
+                  <span className="text-sm font-semibold text-teal-100">
                     {Math.round(alt.matchScore)}% Match
                   </span>
                 </div>
@@ -317,8 +317,8 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <button
           onClick={onTryAnother}
-          className="flex items-center justify-center gap-2 px-8 py-4 bg-purple-600 text-white font-bold rounded-xl 
-                   hover:bg-purple-700 hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
+          className="flex items-center justify-center gap-2 px-8 py-4 bg-teal-600 text-white font-bold rounded-xl 
+                   hover:bg-teal-700 hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
         >
           <RefreshCw className="w-5 h-5" />
           Try Another
@@ -335,10 +335,10 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
 
       {/* Info footer */}
       <div className="text-center space-y-2">
-        <p className="text-purple-300 text-sm">
+        <p className="text-teal-300 text-sm">
           ✨ These recommendations were generated using AI-powered content-based filtering
         </p>
-        <p className="text-purple-400 text-xs">
+        <p className="text-teal-400 text-xs">
           {recommendation.source === 'ml' ? '🤖 ML-Powered' : '⚡ Smart Fallback'} • 
           {' '}{recommendation.totalCandidates} movies analyzed
         </p>

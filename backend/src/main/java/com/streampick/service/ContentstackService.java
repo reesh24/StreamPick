@@ -10,10 +10,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Service for fetching movies from Contentstack CMS
@@ -187,5 +194,79 @@ public class ContentstackService {
         }
     }
 
+    /**
+     * Get user details from subscribers entry
+     * Note: This uses Delivery API (read-only)
+     * For updates, we need Management API (see SubscriberService)
+     */
+    public List<Map<String, Object>> getUserDetails() {
+        log.info("Fetching user details from Contentstack");
+        
+        try {
+            Stack stack = Contentstack.stack(apiKey, deliveryToken, environment);
+            Query query = stack.contentType("subscribers").query();
+            // Note: user_details is a modular block, not a reference
+            
+            final List<Map<String, Object>> userDetailsList = new ArrayList<>();
+            final CountDownLatch latch = new CountDownLatch(1);
+            final boolean[] success = {false};
+            
+            query.find(new QueryResultsCallBack() {
+                @Override
+                public void onCompletion(ResponseType responseType, QueryResult queryResult, com.contentstack.sdk.Error error) {
+                    try {
+                        if (error == null && queryResult != null) {
+                            log.info("Successfully fetched subscribers entry");
+                            List<Entry> entries = queryResult.getResultObjects();
+                            
+                            if (entries != null && !entries.isEmpty()) {
+                                Entry subscribersEntry = entries.get(0);
+                                JSONObject json = subscribersEntry.toJSON();
+                                
+                                // Extract user_details array
+                                if (json.has("user_details")) {
+                                    org.json.JSONArray userDetails = json.getJSONArray("user_details");
+                                    for (int i = 0; i < userDetails.length(); i++) {
+                                        JSONObject userBlock = userDetails.getJSONObject(i);
+                                        Map<String, Object> userMap = new HashMap<>();
+                                        
+                                        // Parse user details
+                                        if (userBlock.has("user")) {
+                                            JSONObject user = userBlock.getJSONObject("user");
+                                            userMap.put("name", user.optString("name"));
+                                            userMap.put("email", user.optString("email"));
+                                            userMap.put("preferred_moods", user.optString("preferred_moods"));
+                                            userMap.put("subscribed_date", user.optString("subscribed_date"));
+                                        }
+                                        
+                                        userDetailsList.add(userMap);
+                                    }
+                                }
+                                
+                                log.info("Found {} subscribers", userDetailsList.size());
+                                success[0] = true;
+                            }
+                        } else {
+                            log.error("Error fetching subscribers: {}", error != null ? error.getErrorMessage() : "Unknown error");
+                        }
+                    } finally {
+                        latch.countDown();
+                    }
+                }
+            });
+            
+            // Wait for callback
+            if (!latch.await(10, TimeUnit.SECONDS)) {
+                log.error("Timeout fetching user details");
+                return new ArrayList<>();
+            }
+            
+            return success[0] ? userDetailsList : new ArrayList<>();
+            
+        } catch (Exception e) {
+            log.error("Error fetching user details", e);
+            return new ArrayList<>();
+        }
+    }
 }
 

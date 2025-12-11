@@ -3,6 +3,7 @@ import Home from './components/Home';
 import MoodSelector from './components/MoodSelector';
 import TimeSelector from './components/TimeSelector';
 import RecommendationCard from './components/RecommendationCard';
+import SubscriptionForm from './components/SubscriptionForm';
 import recommendationService from './services/recommendationService';
 
 /**
@@ -12,7 +13,7 @@ import recommendationService from './services/recommendationService';
  */
 function App() {
   // State management
-  const [step, setStep] = useState('home'); // 'home' | 'mood' | 'time' | 'result'
+  const [step, setStep] = useState('home'); // 'home' | 'mood' | 'time' | 'result' | 'subscribe'
   const [mood, setMood] = useState(null);
   const [timeAvailable, setTimeAvailable] = useState(null);
   const [recommendation, setRecommendation] = useState(null);
@@ -97,12 +98,22 @@ function App() {
   };
 
   return (
+
     <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      
       <div className="w-full max-w-7xl">
+        
         {/* Conditional rendering based on current step */}
         
         {step === 'home' && (
-          <Home onStart={() => setStep('mood')} />
+          <Home 
+            onStart={() => setStep('mood')}
+            onSubscribe={() => setStep('subscribe')}
+          />
+        )}
+
+        {step === 'subscribe' && (
+          <SubscriptionForm onBack={handleStartOver} />
         )}
 
         {step === 'mood' && (
@@ -132,7 +143,7 @@ function App() {
 
       {/* Footer */}
       <footer className="fixed bottom-4 left-0 right-0 text-center">
-        <p className="text-purple-300 text-sm">
+        <p className="text-slate-400 text-sm">
           Made with ❤️ using Contentstack + Python ML + Spring Boot + React
         </p>
       </footer>
