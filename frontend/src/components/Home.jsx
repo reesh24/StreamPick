@@ -41,9 +41,7 @@ export default function Home({ onStart, onSubscribe }) {
 
       {/* Tagline */}
       <p className="text-2xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-        Find your perfect movie in <span className="font-bold text-amber-400 text-3xl">3 clicks</span>.
-        <br />
-        <span className="text-cyan-200">Powered by AI + contextual intelligence ✨</span>
+        Find your perfect movie in <span className="text-amber-400 text-3xl">3 clicks</span>.
       </p>
 
       {/* CTA Buttons */}
