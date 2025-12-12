@@ -40,3 +40,9 @@ logs/
 *.tmp
 *.temp
 /tmp/
+
+# Shell scripts (local development only)
+*.sh
+
+# Zip files
+*.zip
