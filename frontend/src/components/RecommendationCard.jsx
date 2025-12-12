@@ -44,7 +44,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
             className="px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg 
                      hover:bg-teal-700 transition-colors"
           >
-            Try Again
+            Try Different Mood
           </button>
           <button
             onClick={onStartOver}
@@ -321,7 +321,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
                    hover:bg-teal-700 hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
         >
           <RefreshCw className="w-5 h-5" />
-          Try Another
+          Try Different Mood
         </button>
         <button
           onClick={onStartOver}

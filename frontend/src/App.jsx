@@ -67,12 +67,14 @@ function App() {
   };
 
   /**
-   * Try another recommendation with same preferences
+   * Go back to mood selection to try different preferences
    */
   const handleTryAnother = () => {
-    if (mood && timeAvailable) {
-      fetchRecommendation(mood, timeAvailable);
-    }
+    setStep('mood');
+    setMood(null);
+    setTimeAvailable(null);
+    setRecommendation(null);
+    setError(null);
   };
 
   /**
