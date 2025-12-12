@@ -2,6 +2,7 @@ package com.streampick.service;
 
 import com.contentstack.cms.Contentstack;
 import com.contentstack.cms.stack.Stack;
+import com.streampick.dto.Subscriber;
 import com.streampick.util.MoodMapper;
 import okhttp3.ResponseBody;
 import org.json.JSONArray;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,8 +65,9 @@ public class SubscriberService {
      * @param email Subscriber email
      * @param preferredMoods List of preferred moods
      * @return true if successful, false otherwise
+     * @throws IOException if there's an error communicating with Contentstack
      */
-    public boolean addSubscriber(String name, String email, List<String> preferredMoods) {
+    public boolean addSubscriber(String name, String email, List<String> preferredMoods) throws IOException {
         log.info("Adding subscriber: {}", email);
         log.debug("API Key: {}", apiKey != null ? "Present" : "Missing");
         log.debug("Subscribers Entry UID: {}", subscribersEntryUid);
@@ -106,7 +110,7 @@ public class SubscriberService {
                     JSONObject user = userBlock.getJSONObject("user");
                     if (user.has("email") && user.getString("email").equalsIgnoreCase(email)) {
                         log.warn("Email already subscribed: {}", email);
-                        throw new RuntimeException("This email is already subscribed!");
+                        throw new IllegalArgumentException("This email is already subscribed!");
                     }
                 }
             }
@@ -183,17 +187,21 @@ public class SubscriberService {
                 return false;
             }
             
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
             log.error("Error adding subscriber: {}", email, e);
-            throw new RuntimeException(e.getMessage());
+            throw new IOException("Failed to add subscriber: " + e.getMessage(), e);
         }
     }
     
     
     /**
      * Get count of subscribers using Management SDK
+     * @return count of subscribers
+     * @throws IOException if there's an error communicating with Contentstack
      */
-    public int getSubscriberCount() {
+    public int getSubscriberCount() throws IOException {
         try {
             Contentstack cms = getManagementClient();
             com.contentstack.cms.stack.Entry entry = cms.stack(apiKey)
@@ -217,27 +225,8 @@ public class SubscriberService {
             return 0;
         } catch (Exception e) {
             log.error("Error getting subscriber count", e);
-            return 0;
+            throw new IOException("Failed to get subscriber count: " + e.getMessage(), e);
         }
-    }
-    
-    /**
-     * DTO for Subscriber data
-     */
-    public static class Subscriber {
-        private final String name;
-        private final String email;
-        private final List<String> preferredMoods;
-        
-        public Subscriber(String name, String email, List<String> preferredMoods) {
-            this.name = name;
-            this.email = email;
-            this.preferredMoods = preferredMoods;
-        }
-        
-        public String getName() { return name; }
-        public String getEmail() { return email; }
-        public List<String> getPreferredMoods() { return preferredMoods; }
     }
     
     /**
@@ -245,8 +234,9 @@ public class SubscriberService {
      * 
      * @param movieMoodTags List of mood tags from the published movie
      * @return List of matching subscribers
+     * @throws IOException if there's an error communicating with Contentstack
      */
-    public List<Subscriber> getSubscribersByMoods(List<String> movieMoodTags) {
+    public List<Subscriber> getSubscribersByMoods(List<String> movieMoodTags) throws IOException {
         log.info("Fetching subscribers for moods: {}", movieMoodTags);
         
         try {
@@ -273,7 +263,7 @@ public class SubscriberService {
             }
             
             JSONArray userDetails = entryData.getJSONArray("user_details");
-            List<Subscriber> matchingSubscribers = new java.util.ArrayList<>();
+            List<Subscriber> matchingSubscribers = new ArrayList<>();
             
             // Filter subscribers by mood matching
             for (int i = 0; i < userDetails.length(); i++) {
@@ -305,7 +295,7 @@ public class SubscriberService {
             
         } catch (Exception e) {
             log.error("Error fetching subscribers by moods", e);
-            return List.of();
+            throw new IOException("Failed to fetch subscribers by moods: " + e.getMessage(), e);
         }
     }
 }

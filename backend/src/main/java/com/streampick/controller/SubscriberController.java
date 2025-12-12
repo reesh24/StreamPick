@@ -1,8 +1,8 @@
 package com.streampick.controller;
 
-import com.streampick.dto.AddSubscriberRequest;
 import com.streampick.dto.FilterSubscribersRequest;
 import com.streampick.dto.FilteredSubscribersResponse;
+import com.streampick.dto.Subscriber;
 import com.streampick.service.SubscriberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * REST Controller for subscriber management
@@ -32,25 +31,25 @@ public class SubscriberController {
     /**
      * Add a new subscriber to the Contentstack modular block
      * POST /api/subscribers/add
-     * 
-     * @param request Subscriber information
+     *
+     * @param subscriber Subscriber information
      * @return Success/failure response
      */
     @PostMapping("/add")
-    public ResponseEntity<Map<String, Object>> addSubscriber(@RequestBody AddSubscriberRequest request) {
-        log.info("Received subscription request for: {}", request.getEmail());
+    public ResponseEntity<Map<String, Object>> addSubscriber(@RequestBody Subscriber subscriber) {
+        log.info("Received subscription request for: {}", subscriber.getEmail());
         
         Map<String, Object> response = new HashMap<>();
         
         try {
             // Validate input
-            if (request.getName() == null || request.getName().trim().isEmpty()) {
+            if (subscriber.getName() == null || subscriber.getName().trim().isEmpty()) {
                 response.put("success", false);
                 response.put("message", "Name is required");
                 return ResponseEntity.badRequest().body(response);
             }
             
-            if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+            if (subscriber.getEmail() == null || subscriber.getEmail().trim().isEmpty()) {
                 response.put("success", false);
                 response.put("message", "Email is required");
                 return ResponseEntity.badRequest().body(response);
@@ -58,15 +57,15 @@ public class SubscriberController {
             
             // Add subscriber
             boolean success = subscriberService.addSubscriber(
-                request.getName(),
-                request.getEmail(),
-                request.getPreferredMoods()
+                subscriber.getName(),
+                subscriber.getEmail(),
+                subscriber.getPreferredMoods()
             );
             
             if (success) {
                 response.put("success", true);
                 response.put("message", "🎉 Successfully subscribed! You'll receive emails when new movies are published.");
-                response.put("email", request.getEmail());
+                response.put("email", subscriber.getEmail());
                 return ResponseEntity.ok(response);
             } else {
                 response.put("success", false);
@@ -74,10 +73,15 @@ public class SubscriberController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
             }
             
-        } catch (Exception e) {
-            log.error("Error adding subscriber: {}", request.getEmail(), e);
+        } catch (IllegalArgumentException e) {
+            log.warn("Subscription failed for {}: {}", subscriber.getEmail(), e.getMessage());
             response.put("success", false);
             response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        } catch (Exception e) {
+            log.error("Error adding subscriber: {}", subscriber.getEmail(), e);
+            response.put("success", false);
+            response.put("message", "Internal server error: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
@@ -130,22 +134,13 @@ public class SubscriberController {
         
         try {
             // Get matching subscribers from service
-            List<SubscriberService.Subscriber> matchingSubscribers = 
+            List<Subscriber> matchingSubscribers = 
                 subscriberService.getSubscribersByMoods(request.getMoodTags());
             
-            // Convert to response DTO
-            List<FilteredSubscribersResponse.SubscriberInfo> subscriberInfos = 
-                matchingSubscribers.stream()
-                    .map(sub -> new FilteredSubscribersResponse.SubscriberInfo(
-                        sub.getName(),
-                        sub.getEmail(),
-                        sub.getPreferredMoods()
-                    ))
-                    .collect(Collectors.toList());
-            
+            // Build response
             response.setSuccess(true);
             response.setTotalMatching(matchingSubscribers.size());
-            response.setSubscribers(subscriberInfos);
+            response.setSubscribers(matchingSubscribers);
             
             log.info("Found {} matching subscribers", matchingSubscribers.size());
             return ResponseEntity.ok(response);
