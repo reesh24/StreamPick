@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 /**
  * RecommendationCard component - Display the recommended movie
  * 
- * Shows movie details, AI reasoning, and match score
+ * Shows movie details, recommendation reason, and match score
  */
 export default function RecommendationCard({ recommendation, onTryAnother, onStartOver, loading, error }) {
   
@@ -24,7 +24,7 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
         </div>
         <div className="space-y-2">
           <h3 className="text-2xl font-bold text-white">Finding your perfect match...</h3>
-          <p className="text-teal-200">Analyzing your preferences with AI ✨</p>
+          <p className="text-teal-200">Matching your preferences ✨</p>
         </div>
       </div>
     );
@@ -218,13 +218,13 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
               </div>
             )}
 
-            {/* AI Reason */}
+            {/* Recommendation Reason */}
             {aiReason && (
               <div className="p-5 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-xl border-2 border-yellow-400/30">
                 <div className="flex items-start gap-3">
                   <Sparkles className="w-5 h-5 text-yellow-300 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="text-yellow-200 font-semibold text-sm mb-1">Why this is perfect for you:</p>
+                    <p className="text-yellow-200 font-semibold text-sm mb-1">Why we picked this for you:</p>
                     <p className="text-white leading-relaxed">
                       {aiReason}
                     </p>
@@ -336,10 +336,10 @@ export default function RecommendationCard({ recommendation, onTryAnother, onSta
       {/* Info footer */}
       <div className="text-center space-y-2">
         <p className="text-teal-300 text-sm">
-          ✨ These recommendations were generated using AI-powered content-based filtering
+          ✨ Matched using content-based filtering
         </p>
         <p className="text-teal-400 text-xs">
-          {recommendation.source === 'ml' ? '🤖 ML-Powered' : '⚡ Smart Fallback'} • 
+          {recommendation.source === 'ml' ? '🎯 Smart Match' : '⚡ Quick Match'} • 
           {' '}{recommendation.totalCandidates} movies analyzed
         </p>
       </div>
